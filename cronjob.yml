@@ -1,0 +1,58 @@
+---
+- hosts: test2
+  tasks:
+   - name: "cron jobs RHEL 6"
+     cron:
+       user: root
+       name: "{{ item.name }}"
+       weekday: "*"
+       month: "{{ item.month }}"
+       day: "{{ item.day }}"
+       minute: "{{ item.minute  }}"
+       hour: "{{ item.hour }}"
+       job: "{{ item.job }}"
+       state: present
+       disabled: False
+     become: true
+     when: (ansible_facts['os_family'] == "RedHat") and (ansible_facts['distribution_major_version'] == "6")
+     loop:
+       - { job: '/usr/sbin/ntpdate -u ntp.test.net >> /root/ntpchange.log ;/usr/bin/service ntpd restart >> /root/ntpchange.log ;/usr/sbin/ntpdate -u ntp.test.net >> /root/ntpchange.log;/usr/bin/service crond restart;/usr/bin/service rsyslog restart', name: "######################### ntp sync 1 #########################",month: "09",day: "22",minute: "30",hour: "23" }
+       - { job: '/usr/sbin/ntpdate -u ntp.test.net >> /root/ntpchange.log ;/usr/bin/service ntpd restart >> /root/ntpchange.log ;/usr/sbin/ntpdate -u ntp.test.net >> /root/ntpchange.log;/usr/bin/service crond restart;/usr/bin/service rsyslog restart', name: "############ ntp sync 2################",month: "09",day: "23",minute: "25",hour: "01" }
+     tags: add cron job for RHEL 6
+
+   - name: "cron jobs RHEL 7"
+     cron:
+       user: root
+       name: "{{ item.name }}"
+       weekday: "*"
+       month: "{{ item.month }}"
+       day: "{{ item.day }}"
+       minute: "{{ item.minute  }}"
+       hour: "{{ item.hour }}"
+       job: "{{ item.job }}"
+       state: present
+       disabled: False
+     become: true
+     when: (ansible_facts['os_family'] == "RedHat") and (ansible_facts['distribution_major_version'] == "7")
+     loop:
+       - { job: '/usr/sbin/ntpdate -u ntp.test.net >> /root/ntpchange.log ;/usr/bin/systemctl restart chronyd >> /root/ntpchange.log ;/usr/sbin/ntpdate -u ntp.test.net >> /root/ntpchange.log;/usr/bin/systemctl restart crond;/usr/bin/systemctl restart rsyslog', name: "######################### ntp sync 1#########################",month: "09",day: "22",minute: "30",hour: "23" }
+       - { job: '/usr/sbin/ntpdate -u ntp.test.net >> /root/ntpchange.log ;/usr/bin/systemctl restart chronyd >> /root/ntpchange.log ;/usr/sbin/ntpdate -u ntp.test.net >> /root/ntpchange.log;/usr/bin/systemctl restart crond;/usr/bin/systemctl restart rsyslog', name: "######################### ntp sync 2#########################",month: "09",day: "23",minute: "25",hour: "01" }
+     tags: add cron job for RHEL 7
+   - name: "cron jobs RHEL 8"
+     cron:
+       user: root
+       name: "{{ item.name }}"
+       weekday: "*"
+       month: "{{ item.month }}"
+       day: "{{ item.day }}"
+       minute: "{{ item.minute  }}"
+       hour: "{{ item.hour }}"
+       job: "{{ item.job }}"
+       state: present
+       disabled: False
+     become: true
+     when: (ansible_facts['os_family'] == "RedHat" and ansible_facts['distribution_major_version'] == "8")
+     loop:
+       - { job: '/usr/sbin/ntpdate -u ntp.test.net >> /root/ntpchange.log ;/usr/bin/systemctl restart chronyd >> /root/ntpchange.log ;/usr/sbin/ntpdate -u ntp.test.net >> /root/ntpchange.log;/usr/bin/systemctl restart crond;/usr/bin/systemctl restart rsyslog', name: "######################### ntp sync 1#########################",month: "09",day: "22",minute: "30",hour: "23" }
+       - { job: '/usr/sbin/ntpdate -u ntp.test.net >> /root/ntpchange.log ;/usr/bin/systemctl restart chronyd >> /root/ntpchange.log ;/usr/sbin/ntpdate -u ntp.test.net >> /root/ntpchange.log;/usr/bin/systemctl restart crond;/usr/bin/systemctl restart rsyslog', name: "############# ntp sync 2 ################",month: "09",day: "23",minute: "25",hour: "01" }
+     tags: add cron job for RHEL8
