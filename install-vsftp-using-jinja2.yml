@@ -12,5 +12,5 @@
       name: vsftpd
   - name: use template to copy FTP config
     template:
-      src: vsftpd.j2
+      src: vsftpd.j2 ###jinja2 file 
       dest: /etc/vsftpd/vsftpd.conf
